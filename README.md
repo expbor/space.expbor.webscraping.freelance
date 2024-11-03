@@ -2,7 +2,7 @@
 
 ## Description
 
-This app scrapes the projects of www.freelance.de  
+This script scrapes the projects of www.freelance.de  
 
 Starting from the start url:
 ![grafik](https://github.com/user-attachments/assets/165a2ab9-e78a-4a45-bfab-7fb213f95a59)
