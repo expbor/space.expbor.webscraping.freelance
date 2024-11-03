@@ -17,8 +17,6 @@ Results are written to Docker Volume
 create .env File at root level with values:
 
 ```sh
-USERNAME=''
-PASSWORD=''
 STARTURL=''
 ```
 

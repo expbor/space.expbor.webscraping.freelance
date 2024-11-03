@@ -1,17 +1,15 @@
 import puppeteer from "puppeteer";
 import fs from 'fs';
 
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
+function delay(time) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, time)
+    });
+}
+
 const startUrl = process.env.STARTURL;
 
-if (username == ''){
-    console.log('Username missing');
-};
-if (password == ''){
-    console.log('Password missing');
-};
-if (startUrl == ''){
+if (startUrl == '') {
     console.log('Starturl missing');
 };
 
@@ -27,43 +25,34 @@ const getQuotes = async () => {
     // Open a new page
     var page = await browser.newPage();
 
-
-    await page.goto("https://www.freelancermap.de/login", {
+    await page.goto(startUrl, {
         waitUntil: "domcontentloaded",
     });
 
-    await page.type('#login', username);
-    await page.type('#password', password);
-    await page.locator(".col-sm-12.fm-btn.fm-btn-success").click();
+    await page.waitForSelector('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection');
+    const acceptCookies = await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection');
+    await acceptCookies.click();
 
-    await page.waitForNavigation( {waitUntil: 'domcontentloaded'} );
-
-    await page.goto( startUrl, {
-        waitUntil: "domcontentloaded",
-    });
-
-
-    const arrayPages = await page.evaluate(() => Array.from(document.querySelectorAll('.open-registration-modal'), element => element.innerText));
+    const arrayPages = await page.evaluate(() => Array.from(document.querySelectorAll('.nav-pagination-link'), element => element.innerText));
     const lastPage = arrayPages[arrayPages.length - 2];
-
 
     try {
         do {
-            const currentPage = await page.evaluate(() => Array.from(document.querySelectorAll('.active.disabled'), element => element.innerText));
+            const currentPage = await page.evaluate(() => Array.from(document.querySelectorAll('.nav-pagination-item.active > .nav-pagination-link'), element => element.innerText));
 
             console.log("Seite " + currentPage + " von " + lastPage);
 
 
-            const quotesSite = await page.evaluate(() => Array.from(document.querySelectorAll('.project-title'), element => element.innerText));
+            const quotesSite = await page.evaluate(() => Array.from(document.querySelectorAll('.panel-body.single-profile.clearfix'), element => element.innerText));
             quotes = quotes.concat(quotesSite);
 
-            const nextAvailable = await page.$(".next.open-registration-modal");
+            const nextAvailable = await page.locator('.pagination > li:last-child > a');
             await nextAvailable.click();
-            await page.waitForNetworkIdle(100);
+            await page.waitForNavigation();
         } while (true);
 
-    } catch (error) {       
-        if (error.message != "Cannot read properties of null (reading 'click')"){
+    } catch (error) {
+        if (error.message != "Timed out after waiting 30000ms"){
             console.log(error);
         }
     };
@@ -71,7 +60,7 @@ const getQuotes = async () => {
     // // Close the browser
     await browser.close();
 
-    return(quotes);
+    return (quotes);
 
 };
 
@@ -86,9 +75,11 @@ var elementsString = JSON.stringify(elementsObject);
 
 fs.writeFile('/usr/src/app/Data.json', elementsString, err => {
     if (err) {
-      console.error(err);
+        console.error(err);
     } else {
-      console.log("Datei erfolgreich geschrieben");
+        console.log("Datei erfolgreich geschrieben");
     }
-  });
+});
+
+
 

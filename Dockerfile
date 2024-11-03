@@ -38,4 +38,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the application.
-CMD USERNAME=${USERNAME} PASSWORD=${PASSWORD} STARTURL=${STARTURL} node index.js 
+CMD STARTURL=${STARTURL} node index.js 
