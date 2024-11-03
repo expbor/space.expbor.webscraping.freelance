@@ -1,4 +1,4 @@
-# Webscraper for www.freelancermap.de
+# Webscraper for www.freelance.de
 
 ## Description
 
