@@ -5,9 +5,10 @@
 This app scrapes the projects of www.freelance.de  
 
 Starting from the start url:
-
+![grafik](https://github.com/user-attachments/assets/165a2ab9-e78a-4a45-bfab-7fb213f95a59)
 
 the next Button is used until the end is reached.
+![grafik](https://github.com/user-attachments/assets/f54d0103-343b-46a6-9eb0-65a1855fab96)
 
 
 Results are written to Docker Volume
