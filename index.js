@@ -29,24 +29,25 @@ const getQuotes = async () => {
         waitUntil: "domcontentloaded",
     });
 
-    await page.waitForSelector('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection');
-    const acceptCookies = await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection');
+    await page.waitForSelector('.privacy-prompt-button.primary-button.ccmgt_accept_button.rebrand');
+    const acceptCookies = await page.locator('.privacy-prompt-button.primary-button.ccmgt_accept_button.rebrand');
     await acceptCookies.click();
 
-    const arrayPages = await page.evaluate(() => Array.from(document.querySelectorAll('.nav-pagination-link'), element => element.innerText));
-    const lastPage = arrayPages[arrayPages.length - 2];
+    const arrayPages = await page.evaluate(() => Array.from(document.querySelectorAll('.res-14njlc6'), element => element.innerText));
+    const lastPage = arrayPages[arrayPages.length - 1];
 
     try {
         do {
-            const currentPage = await page.evaluate(() => Array.from(document.querySelectorAll('.nav-pagination-item.active > .nav-pagination-link'), element => element.innerText));
+            const currentPage = await page.evaluate(() => Array.from(document.querySelectorAll('.res-3ue2q3 > .res-1cekje2 > .res-vurnku'), element => element.innerText));
 
             console.log("Seite " + currentPage + " von " + lastPage);
 
 
-            const quotesSite = await page.evaluate(() => Array.from(document.querySelectorAll('.panel-body.single-profile.clearfix'), element => element.innerText));
+            const quotesSite = await page.evaluate(() => Array.from(document.querySelectorAll('.res-1ewaude > .res-vurnku > .res-nehv70'), element => element.innerText));
             quotes = quotes.concat(quotesSite);
 
-            const nextAvailable = await page.locator('.pagination > li:last-child > a');
+            const nextAvailable = await page.locator('[id^="stepstone-pagination-"] > ul > li:nth-child(9) > a');
+        
             await nextAvailable.click();
             await page.waitForNavigation();
         } while (true);
